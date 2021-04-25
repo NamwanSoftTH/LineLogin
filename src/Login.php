@@ -1,30 +1,30 @@
 <?php
 namespace TyperEJ\LineLogin;
 
-class Login {
+class Login
+{
     protected $clientId;
     protected $clientSecret;
     protected $curl;
 
-    public function __construct($clientId,$clientSecret = null)
+    public function __construct($clientId, $clientSecret = null)
     {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->curl = new Curl();
     }
 
-    public function requestToken($code,$redirectUri = null)
+    public function requestToken($code, $redirectUri = null)
     {
-        if(!$this->clientSecret)
-        {
+        if (!$this->clientSecret) {
             throw new \UnexpectedValueException('ClientSecret is required');
         }
 
         $params = [
-            'grant_type' => 'authorization_code',
-            'redirect_uri' => $redirectUri ?? $this->getCurrentUrl(),
-            'code' => $code,
-            'client_id' => $this->clientId,
+            'grant_type'    => 'authorization_code',
+            'redirect_uri'  => $redirectUri ?? $this->getCurrentUrl(),
+            'code'          => $code,
+            'client_id'     => $this->clientId,
             'client_secret' => $this->clientSecret,
         ];
 
@@ -46,20 +46,20 @@ class Login {
         $http = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
         $uri = explode('?', $_SERVER['REQUEST_URI'], 2)[0];
 
-        return $http. "://$_SERVER[HTTP_HOST]$uri";
+        return $http . "://$_SERVER[HTTP_HOST]$uri";
     }
 
     public function generateLoginUrl($args = ['state' => 'default'])
     {
         $params = [
             'response_type' => 'code',
-            'client_id' => $this->clientId,
-            'redirect_uri' => $this->getCurrentUrl(),
-            'scope' => 'openid profile'
+            'client_id'     => $this->clientId,
+            'redirect_uri'  => $this->getCurrentUrl(),
+            'scope'         => 'openid profile email',
         ];
 
-        $params = array_merge($params,$args);
+        $params = array_merge($params, $args);
 
-        return UrlEnum::AUTH_URL.'?'.http_build_query($params,'','&',PHP_QUERY_RFC3986);
+        return UrlEnum::AUTH_URL . '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     }
 }
