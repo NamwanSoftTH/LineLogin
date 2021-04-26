@@ -30,12 +30,11 @@ class UserInfo
 
     public function __get($property)
     {
-        if(isset($this->info[$property]))
-        {
+        if (isset($this->info[$property])) {
             return $this->info[$property];
         }
 
-        throw new  \Exception('No such information');
+        throw new \Exception('No such information');
     }
 
     public function getFriendship()
@@ -62,8 +61,10 @@ class UserInfo
             throw new \Exception($error);
 
         }
-
-        return json_decode($response);
+        $res = json_decode($response);
+        $res['accessToken'] = $this->accessToken;
+        $res['info'] = $this->info;
+        return $res;
     }
 
 }
