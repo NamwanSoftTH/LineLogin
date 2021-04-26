@@ -62,8 +62,7 @@ class UserInfo
 
         }
         $res = json_decode($response);
-        $res['accessToken'] = $this->accessToken;
-        $res['info'] = $this->info;
+        $res->email = $this->info['email'];
         return $res;
     }
 
