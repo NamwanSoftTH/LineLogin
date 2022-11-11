@@ -41,9 +41,12 @@ class Login
         }
     }
 
-    private function getCurrentUrl()
+    private function getCurrentUrl($https=false)
     {
         $http = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+        if($https){
+            $http = "https";
+        }
         $uri = explode('?', $_SERVER['REQUEST_URI'], 2)[0];
 
         return $http . "://$_SERVER[HTTP_HOST]$uri";
